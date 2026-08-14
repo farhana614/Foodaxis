@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50">
+  <rect x="0" y="10" width="40" height="40" rx="10" fill="#f97316"/>
+  <path d="M10 25h20M10 35h15" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="32" cy="35" r="4" fill="white"/>
+  <text x="50" y="38" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="#111827">FoodAxis</text>
+</svg>
