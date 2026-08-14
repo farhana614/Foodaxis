@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, Mail, Lock, UtensilsCrossed } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, UtensilsCrossed, AlertCircle } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
@@ -15,7 +15,7 @@ const ROLE_DASHBOARD = {
 
 export default function Login() {
   const navigate = useNavigate()
-  const { user, login, isLoading } = useAuth()
+  const { user, login, isLoading, error, clearError } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [selectedRole, setSelectedRole] = useState('customer')
@@ -28,18 +28,25 @@ export default function Login() {
     { id: 'superadmin', label: 'Super Admin' },
   ]
 
-  // 🔧 FIX #2a: If already logged in, redirect away from login page
+  // Redirect if already logged in
   useEffect(() => {
     if (user && user.role) {
       navigate(ROLE_DASHBOARD[user.role], { replace: true })
     }
   }, [user, navigate])
 
+  // Clear error when user changes input or role
+  useEffect(() => {
+    if (error) clearError()
+  }, [formData.email, formData.password, selectedRole])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await login(formData.email, formData.password, selectedRole)
-    // 🔧 FIX #2b: Navigate to role dashboard after login
-    navigate(ROLE_DASHBOARD[selectedRole], { replace: true })
+    const loggedInUser = await login(formData.email, formData.password, selectedRole)
+    // Only navigate if login succeeded (returns user object)
+    if (loggedInUser) {
+      navigate(ROLE_DASHBOARD[selectedRole], { replace: true })
+    }
   }
 
   return (
@@ -70,6 +77,14 @@ export default function Login() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Error Message */}
+        {error && (
+          <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
         <Input
           label="Email"
           type="email"
