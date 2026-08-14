@@ -11,9 +11,6 @@ import SuperAdminLayout from '../components/layout/SuperAdminLayout'
 
 // Auth Pages
 import Login from '../pages/auth/Login'
-import Register from '../pages/auth/Register'
-import ForgotPassword from '../pages/auth/ForgotPassword'
-import ResetPassword from '../pages/auth/ResetPassword'
 
 // Customer Pages
 import Home from '../pages/customer/Home'
@@ -69,9 +66,6 @@ export default function AppRoutes() {
       {/* Public Auth Routes */}
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
       </Route>
 
       {/* Customer Routes */}
@@ -142,7 +136,7 @@ export default function AppRoutes() {
         </Route>
       </Route>
 
-      {/* Fallback */}
+      {/* Fallback: redirect unknown paths to login */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   )
