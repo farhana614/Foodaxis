@@ -1,15 +1,24 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, UtensilsCrossed } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
 
+const ROLE_DASHBOARD = {
+  customer: '/',
+  admin: '/admin',
+  kitchen: '/kitchen',
+  rider: '/rider',
+  superadmin: '/superadmin',
+}
+
 export default function Login() {
+  const navigate = useNavigate()
+  const { user, login, isLoading } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [selectedRole, setSelectedRole] = useState('customer')
-  const { login, isLoading } = useAuth()
 
   const roles = [
     { id: 'customer', label: 'Customer' },
@@ -19,9 +28,18 @@ export default function Login() {
     { id: 'superadmin', label: 'Super Admin' },
   ]
 
+  // 🔧 FIX #2a: If already logged in, redirect away from login page
+  useEffect(() => {
+    if (user && user.role) {
+      navigate(ROLE_DASHBOARD[user.role], { replace: true })
+    }
+  }, [user, navigate])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     await login(formData.email, formData.password, selectedRole)
+    // 🔧 FIX #2b: Navigate to role dashboard after login
+    navigate(ROLE_DASHBOARD[selectedRole], { replace: true })
   }
 
   return (
