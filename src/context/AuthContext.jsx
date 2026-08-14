@@ -10,7 +10,6 @@ const MOCK_USERS = {
   superadmin: { id: 5, name: 'Super Admin', email: 'super@foodaxis.com', role: 'superadmin' },
 }
 
-// Hardcoded credentials for demo
 const VALID_CREDENTIALS = {
   'admin@foodaxis.com': { password: 'admin123', role: 'admin' },
   'super@foodaxis.com': { password: 'super123', role: 'superadmin' },
