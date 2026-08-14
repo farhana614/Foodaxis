@@ -28,14 +28,12 @@ export default function Login() {
     { id: 'superadmin', label: 'Super Admin' },
   ]
 
-  // Redirect if already logged in
   useEffect(() => {
-    if (user && user.role) {
+    if (user?.role) {
       navigate(ROLE_DASHBOARD[user.role], { replace: true })
     }
   }, [user, navigate])
 
-  // Clear error when user changes input or role
   useEffect(() => {
     if (error) clearError()
   }, [formData.email, formData.password, selectedRole])
@@ -43,7 +41,6 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     const loggedInUser = await login(formData.email, formData.password, selectedRole)
-    // Only navigate if login succeeded (returns user object)
     if (loggedInUser) {
       navigate(ROLE_DASHBOARD[selectedRole], { replace: true })
     }
@@ -59,7 +56,6 @@ export default function Login() {
         <p className="text-gray-500 mt-1">Sign in to your FoodAxis account</p>
       </div>
 
-      {/* Role Selector */}
       <div className="grid grid-cols-5 gap-2 mb-6">
         {roles.map((role) => (
           <button
@@ -77,7 +73,6 @@ export default function Login() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Error Message */}
         {error && (
           <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
